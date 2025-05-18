@@ -7,12 +7,11 @@ PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1 systemd git-r3 udev systemd desktop
+inherit distutils-r1 systemd udev desktop
 
 DESCRIPTION="A tool to change and program the mapping of your input device buttons"
 HOMEPAGE="https://github.com/sezanzeb/input-remapper"
-EGIT_REPO_URI="https://github.com/sezanzeb/input-remapper.git"
-EGIT_BRANCH="bump_2.1.1"
+SRC_URI="https://github.com/sezanzeb/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
