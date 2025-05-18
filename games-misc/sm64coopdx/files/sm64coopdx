@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Because of relative rpath for libdiscord_game_sdk.so we can't just symlink the main exe.
+# It has to run from the install dir.
+cd /opt/sm64coopdx
+./sm64coopdx

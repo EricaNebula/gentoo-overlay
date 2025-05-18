@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=sm64coopdx
+Icon=sm64coopdx
+Exec=sm64coopdx
+Terminal=false
+Categories=Game
+Comment=sm64coopdx is an online multiplayer project for the Super Mario 64 PC port that synchronizes all entities and every level for multiple players.
