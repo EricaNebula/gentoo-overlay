@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 3359b6e..d0aa9a5 100755
+--- a/setup.py
++++ b/setup.py
+@@ -11,7 +11,7 @@ setuptools.setup(
+     long_description=(Path(__file__).parent / "README.md").read_text(),
+     long_description_content_type="text/markdown",
+     platforms=['any'],
+-    packages=setuptools.find_packages(exclude=['tests']),
++    packages=setuptools.find_packages(exclude=['tests', 'tests.*']),
+     use_scm_version={
+         'write_to': 'autobuild/version.py',
+         'write_to_template': 'AUTOBUILD_VERSION_STRING = \'{version}\'',
