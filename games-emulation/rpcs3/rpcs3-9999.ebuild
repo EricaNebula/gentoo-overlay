@@ -12,6 +12,7 @@ RTMIDI_COMMIT="1e5b49925aa60065db52de44c366d446a902547b"
 WOLFSSL_COMMIT="8970ff4c34034dbb3594943d11f8c9d4c5512bd5"
 SOUNDTOUCH_COMMIT="ced3ce8d5ecc5aef8a5156fea206a37b33774bf3"
 YAMLCPP_COMMIT="456c68f452da09d8ca84b375faa2b1397713eaba"
+VKMEMALLOCATOR_COMMIT="6ec8481c8a13db586d7b3ba58f4eb9bbf017edf0"
 
 DESCRIPTION="PS3 emulator/debugger"
 HOMEPAGE="https://rpcs3.net/"
@@ -35,6 +36,7 @@ else
 		https://github.com/wolfSSL/wolfssl/archive/${WOLFSSL_COMMIT}.tar.gz -> ${PN}-wolfssl-${WOLFSSL_COMMIT}.tar.gz
 		https://github.com/RPCS3/soundtouch/archive/${SOUNDTOUCH_COMMIT}.tar.gz -> ${PN}-soundtouch-${SOUNDTOUCH_COMMIT}.tar.gz
 		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${SOUNDTOUCH_COMMIT}-.tar.gz
+		https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/arhive/${VKMEMALLOCATOR_COMMIT}.tar.gz -> ${PN}-vk-mem-allocator-${VKMEMALLOCATOR_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi
@@ -97,6 +99,9 @@ src_prepare() {
 
 		rmdir "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
 		mv "${WORKDIR}/yaml-cpp-${YAMLCPP_COMMIT}" "${S}/3rdparty/SoundTouch/soundtouch" || die
+
+		rmdir "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
+		mv "${WORKDIR}/vk-mem-allocator-${VKMEMALLOCATOR_COMMIT}" "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
 
 		#Define RPCS3 Version
 		{ echo "#define RPCS3_GIT_VERSION \"${PV}\""
