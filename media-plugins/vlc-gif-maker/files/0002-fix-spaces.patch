@@ -1,0 +1,11 @@
+diff --git a/vlc_gif_maker.lua b/vlc_gif_maker.lua
+--- a/vlc_gif_maker.lua
++++ b/vlc_gif_maker.lua
+@@ -160,6 +160,7 @@
+     if vlc.win then command = string_replace(command, '/', '\\') end
+     command = string_replace(command, '%5B', '[')
+     command = string_replace(command, '%5D', ']')
++    command = string_replace(command, '%20', ' ')
+     vlc.msg.info(command)
+     return command
+ end

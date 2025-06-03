@@ -1,0 +1,13 @@
+diff --git a/vlc_gif_maker.lua b/vlc_gif_maker.lua
+--- a/vlc_gif_maker.lua
++++ b/vlc_gif_maker.lua
+@@ -119,7 +119,7 @@
+     command_input = dlg:add_text_input(command, 5, 3, 3)
+ 
+     dlg:add_label("FPS", 5, 4, 1)
+-    fps_input = dlg:add_text_input("15", 5, 5, 1)
++    fps_input = dlg:add_text_input("20", 5, 5, 1)
+ 
+     dlg:add_label("Looping", 6, 4, 1)
+     looping_input = dlg:add_dropdown(6, 5, 1)
+ end
