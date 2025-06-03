@@ -51,7 +51,6 @@ DEPEND="
 	dev-libs/hidapi
 	dev-libs/libevdev
 	dev-libs/pugixml
-	dev-libs/xxhash
 	dev-qt/qtbase:6[concurrent,dbus,gui,widgets]
 	dev-qt/qtmultimedia:6
 	dev-qt/qtsvg:6
@@ -152,7 +151,6 @@ src_configure() {
 		-DUSE_SYSTEM_LIBPNG=ON
 		-DUSE_SYSTEM_LIBUSB=ON
 		-DUSE_SYSTEM_PUGIXML=ON
-		-DUSE_SYSTEM_XXHASH=ON
 		-DUSE_SYSTEM_ZLIB=ON
 		-DUSE_DISCORD_RPC=$(usex discord)
 		-DUSE_FAUDIO=$(usex faudio)
