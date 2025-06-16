@@ -1,0 +1,13 @@
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml
++++ b/pom.xml
+@@ -5,7 +5,7 @@
+ 	<modelVersion>4.0.0</modelVersion>
+ 	<groupId>dylwedma11748</groupId>
+ 	<artifactId>JTegraNX</artifactId>
+-	<version>1.6.9-R1</version>
++	<version>1.6.9-R2</version>
+ 	<name>JTegraNX</name>
+ 	<description>Another RCM payload injector</description>
+ 	<inceptionYear>2019</inceptionYear>
+

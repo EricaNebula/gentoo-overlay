@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=JTegraNX
+Icon=jtegranx_48
+Exec=jtegranx
+Terminal=false
+Categories=Game
+Comment=JTegraNX - Another RCM Payload Injector

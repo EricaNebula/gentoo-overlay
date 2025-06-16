@@ -1,0 +1,3 @@
+# Added for JTegraNX: https://github.com/dylwedma11748/JTegraNX
+# From: https://switch.hacks.guide/extras/adding_udev.html
+SUBSYSTEMS=="usb", ATTRS{manufacturer}=="NVIDIA Corp.", ATTRS{product}=="APX", GROUP="nintendo_switch"
