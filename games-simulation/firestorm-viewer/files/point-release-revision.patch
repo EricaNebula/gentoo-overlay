@@ -1,0 +1,13 @@
+diff --git a/scripts/configure_firestorm.sh b/scripts/configure_firestorm.sh
+index 96af905f2e..40c4622d25 100755
+--- a/scripts/configure_firestorm.sh
++++ b/scripts/configure_firestorm.sh
+@@ -433,7 +433,7 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
+     then
+         buildVer=`git rev-list --count HEAD`
+     else
+-        buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1 | grep "[0-9]*"`
++        buildVer=`basename $PWD | rev | cut -d "." -f 1 | rev`
+     fi
+     export revision=${buildVer}
+ 

@@ -1,0 +1,13 @@
+diff --git a/indra/newview/fsfloaterim.cpp b/indra/newview/fsfloaterim.cpp
+index 136a626252..2a35cc2433 100644
+--- a/indra/newview/fsfloaterim.cpp
++++ b/indra/newview/fsfloaterim.cpp
+@@ -481,7 +481,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
+                             }
+                             else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
+                             {
+-                                str_version_tag = "Unofficial";
++                                str_version_tag = LLVersionInfo::getInstance()->getBuildVersion() + " Unofficial";
+                             }
+                             else// In testing groups we'll allow all non-release recognised channels.
+                             {

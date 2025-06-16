@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Firestorm Viewer
+Icon=firestorm_48
+Exec=firestorm
+Terminal=false
+Categories=Game
+Comment=Firestorm is a third party viewer derived from the official Second Life client.
