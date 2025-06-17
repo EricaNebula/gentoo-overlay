@@ -7,16 +7,13 @@ PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit git-r3 distutils-r1
+inherit distutils-r1
 
 DESCRIPTION="fmodstudio build scripts and autobuild frameworking for Firestorm Viewer"
 HOMEPAGE="https://github.com/FirestormViewer/3p-fmodstudio"
-EGIT_REPO_URI="https://github.com/FirestormViewer/3p-fmodstudio.git"
-EGIT_BRANCH="master"
-EGIT_COMMIT="f739ae6a0a635bf8a897ff3fc3d7719e417b43c9"
-
-# This is not a live repo and doesn't need git-r3. Just download the source tarball for this release.
-# Change this!
+COMMIT="f739ae6a0a635bf8a897ff3fc3d7719e417b43c9"
+SRC_URI="https://github.com/FirestormViewer/3p-fmodstudio/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${COMMIT}
 
 LICENSE=""
 SLOT="0"
