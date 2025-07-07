@@ -22,7 +22,10 @@ else
     KEYWORDS="~amd64"
 fi
 
-LICENSE=""
+PACKAGED="build-linux-x86_64/newview/packaged"
+DEST="/opt/firestorm-viewer"
+
+LICENSE="GPL-2-with-Linden-Lab-FLOSS-exception"
 SLOT="0"
 IUSE="+fmodstudio cpu_flags_x86_avx2 opensim"
 
@@ -32,7 +35,7 @@ PATCHES=(
 )
 
 BDEPEND="
-dev-vcs/mercurial
+app-admin/chrpath
 fmodstudio? ( net-misc/3p-fmodstudio )
 media-libs/mesa
 net-libs/libssh
@@ -55,18 +58,33 @@ $(python_gen_cond_dep '
 
 RDEPEND="${BDEPEND}"
 
-# This is a huge no-no
-# However, the alternative is to figure out what autobuild is going to fetch
-# and then find a way to pre-fetch all of it in a way that can be used for offline building.
-# Autobuild doesn't have a way to do that, so one would have to be created from scratch.
-# That's definitely out of scope for this so long as it lives outside of GURU.
-RESTRICT=network-sandbox
+RESTRICT="mirror"
 
-src_compile() {
+pkg_setup() {
+    AUTOBUILD_FLAGS="--no-package"
+
+    # Just affects the titlebar of the app, really
+    if [[ ${PV} == "9999" ]]; then
+        AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --chan=Nebula-Live"
+    else
+        AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --chan=Nebula-Release"
+    fi
+
+    # Build Firestorm with different autobuild flags depending on USE flag values.
+    if use cpu_flags_x86_avx2; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --avx2"; fi
+    if ! use opensim; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --no-opensim"; fi
+    if use fmodstudio; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --fmodstudio"; fi
+
+    export AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} -DLL_TESTS:BOOL=FALSE -DLLCOREHTTP_TESTS=FALSE"
     export AUTOBUILD_VARIABLES_FILE=/usr/share/firestorm-viewer/fs-build-variables/variables
     export CC=/usr/x86_64-pc-linux-gnu/gcc-bin/11/gcc
     export CXX=/usr/x86_64-pc-linux-gnu/gcc-bin/11/g++
     export CXXFLAGS="${CXXFLAGS} -std=gnu++20"
+}
+
+src_unpack() {
+    if [[ ${PV} == 9999 ]]; then git-r3_src_unpack; else default; fi
+    cd ${S}
 
     # fmodstudio is optional but highly recommended.
     if use fmodstudio; then
@@ -87,62 +105,55 @@ src_compile() {
         fi
     fi
 
-    # We are managing our own installation
-    AUTOBUILD_FLAGS="--no-package"
-
-    # Just affects the titlebar of the app, really
-    if [[ ${PV} == "9999" ]]; then
-        AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --chan=Nebula-Live"
-    else
-        AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --chan=Nebula-Release"
-    fi
-
-    # Build Firestorm with different autobuild flags depending on USE flag values.
-    if use cpu_flags_x86_avx2; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --avx2"; fi
-    if ! use opensim; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --no-opensim"; fi
-    if use fmodstudio; then AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} --fmodstudio"; fi
-
-    # The configure command pulls in all of the deps
-    # I could run this in src_unpack but that would still be the wrong place for it.
+    # Configure will pull in all of the dependencies
     echo autobuild configure -A 64 -c ReleaseFS_open -- --clean $AUTOBUILD_FLAGS
     autobuild configure -A 64 -c ReleaseFS_open -- --clean $AUTOBUILD_FLAGS
+}
 
-    # Build can then be fully offline
+src_compile() {
+    # With the configure step done in src_unpack, the build can be done fully offline.
     echo autobuild build -A 64 -c ReleaseFS_open -- $AUTOBUILD_FLAGS
     autobuild build -A 64 -c ReleaseFS_open -- $AUTOBUILD_FLAGS
 }
 
 src_install() {
-
     # Remove unnecessary Windows DLLs
-    rm -r build-linux-x86_64/newview/packaged/bin/win32
-    rm -r build-linux-x86_64/newview/packaged/bin/win64
+    rm -r ${PACKAGED}/bin/win32
+    rm -r ${PACKAGED}/bin/win64
 
     # Install viewer files
-    insinto /opt/firestorm-viewer
-    doins -r build-linux-x86_64/newview/packaged/*
+    insinto ${DEST}
+    doins -r ${PACKAGED}/*
 
     # Set executable permissions where needed
-    fperms +x /opt/firestorm-viewer/firestorm
-    fperms +x /opt/firestorm-viewer/install.sh
-    fperms +x /opt/firestorm-viewer/secondlife-i686.supp
-    fperms +x /opt/firestorm-viewer/bin/SLPlugin
-    fperms +x /opt/firestorm-viewer/bin/SLVoice
-    fperms +x /opt/firestorm-viewer/bin/chrome-sandbox
-    fperms +x /opt/firestorm-viewer/bin/do-not-directly-run-firestorm-bin
-    fperms +x /opt/firestorm-viewer/bin/dullahan_host
-    fperms +x /opt/firestorm-viewer/bin/linux-crash-logger.bin
-    fperms +x /opt/firestorm-viewer/bin/snapshot_blob.bin
-    fperms +x /opt/firestorm-viewer/bin/v8_context_snapshot.bin
-    fperms +x /opt/firestorm-viewer/bin/llplugin/libmedia_plugin_cef.so
-    fperms +x /opt/firestorm-viewer/bin/llplugin/libmedia_plugin_gstreamer.so
+    fperms +x ${DEST}/firestorm
+    fperms +x ${DEST}/install.sh
+    fperms +x ${DEST}/secondlife-i686.supp
+    fperms +x ${DEST}/bin/SLPlugin
+    fperms +x ${DEST}/bin/SLVoice
+    fperms +x ${DEST}/bin/chrome-sandbox
+    fperms +x ${DEST}/bin/do-not-directly-run-firestorm-bin
+    fperms +x ${DEST}/bin/dullahan_host
+    fperms +x ${DEST}/bin/linux-crash-logger.bin
+    fperms +x ${DEST}/bin/snapshot_blob.bin
+    fperms +x ${DEST}/bin/v8_context_snapshot.bin
+    fperms +x ${DEST}/bin/llplugin/libmedia_plugin_cef.so
+    fperms +x ${DEST}/bin/llplugin/libmedia_plugin_gstreamer.so
+    fperms +x ${DEST}/etc/handle_secondlifeprotocol.sh
+    fperms +x ${DEST}/etc/launch_url.sh
+    fperms +x ${DEST}/etc/refresh_desktop_app_entry.sh
+    fperms +x ${DEST}/etc/register_secondlifeprotocol.sh
 
     # Symlink the main executable
-    dosym /opt/firestorm-viewer/firestorm /usr/bin/firestorm
+    dosym ${DEST}/firestorm /usr/bin/firestorm
 
 	# Install desktop file
 	domenu "${FILESDIR}/firestorm-viewer.desktop"
 
 	# Install icon file
-	doicon -s 48 "/opt/firestorm-viewer/firestorm_48.png"
+	doicon -s 48 "${DEST}/firestorm_48.png"
+
+    # Fix rpath warnings
+    chrpath -d ${ED}/${DEST}/lib/libalut.so.0.0.0
+    chrpath -d ${ED}/${DEST}/bin/dullahan_host
 }
