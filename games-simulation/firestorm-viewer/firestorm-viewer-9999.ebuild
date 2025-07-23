@@ -27,7 +27,7 @@ DEST="/opt/firestorm-viewer"
 
 LICENSE="GPL-2-with-Linden-Lab-FLOSS-exception"
 SLOT="0"
-IUSE="+fmodstudio cpu_flags_x86_avx2 opensim"
+IUSE="+fmodstudio cpu_flags_x86_avx2 opensim voice"
 
 PATCHES=(
     "${FILESDIR}/append-unofficial.patch"
@@ -56,7 +56,8 @@ $(python_gen_cond_dep '
     dev-python/pyzstd[${PYTHON_USEDEP}]
 ')"
 
-RDEPEND="${BDEPEND}"
+RDEPEND="${BDEPEND}
+voice? ( net-dns/libidn-compat )"
 
 RESTRICT="mirror"
 
