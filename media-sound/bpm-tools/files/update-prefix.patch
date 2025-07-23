@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 5a0853e..c4db9d1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,6 @@
+ -include .config
+ 
+-PREFIX ?= /usr/local
++PREFIX ?= /usr
+ INSTALL ?= install
+ 
+ BINDIR ?= $(PREFIX)/bin
