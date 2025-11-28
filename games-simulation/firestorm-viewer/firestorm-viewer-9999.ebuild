@@ -136,7 +136,6 @@ src_install() {
     fperms +x ${DEST}/bin/do-not-directly-run-firestorm-bin
     fperms +x ${DEST}/bin/dullahan_host
     fperms +x ${DEST}/bin/linux-crash-logger.bin
-    fperms +x ${DEST}/bin/snapshot_blob.bin
     fperms +x ${DEST}/bin/v8_context_snapshot.bin
     fperms +x ${DEST}/bin/llplugin/libmedia_plugin_cef.so
     fperms +x ${DEST}/bin/llplugin/libmedia_plugin_gstreamer.so
