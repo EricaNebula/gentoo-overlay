@@ -6,6 +6,12 @@ diff --git a/vlc_gif_maker.lua b/vlc_gif_maker.lua
      command = string_replace(command, '%5B', '[')
      command = string_replace(command, '%5D', ']')
 +    command = string_replace(command, '%20', ' ')
++    command = string_replace(command, '%23', '#')
++    command = string_replace(command, '%26', '&')
++    command = string_replace(command, '%27', "'")
++    command = string_replace(command, '%28', '(')
++    command = string_replace(command, '%29', ')')
++    command = string_replace(command, '%E2%80%99', '’')
      vlc.msg.info(command)
      return command
  end
