@@ -1,9 +1,9 @@
-# Copyright 2025 Erica Nebula
+# Copyright 2025-2026 Erica Nebula
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
@@ -47,7 +47,7 @@ media-libs/fontconfig
 dev-build/cmake
 dev-libs/glib
 sys-libs/glibc
-sys-devel/gcc:11
+>=sys-devel/gcc-13
 net-misc/fs-build-variables
 $(python_gen_cond_dep '
     dev-python/autobuild[${PYTHON_USEDEP}]
@@ -78,9 +78,6 @@ pkg_setup() {
 
     export AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} -DLL_TESTS:BOOL=FALSE -DLLCOREHTTP_TESTS=FALSE"
     export AUTOBUILD_VARIABLES_FILE=/usr/share/firestorm-viewer/fs-build-variables/variables
-    export CC=/usr/x86_64-pc-linux-gnu/gcc-bin/11/gcc
-    export CXX=/usr/x86_64-pc-linux-gnu/gcc-bin/11/g++
-    export CXXFLAGS="${CXXFLAGS} -std=gnu++20"
 }
 
 src_unpack() {

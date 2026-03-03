@@ -1,9 +1,9 @@
-# Copyright 2025 Erica Nebula
+# Copyright 2025-2026 Erica Nebula
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
@@ -18,9 +18,5 @@ KEYWORDS="~amd64"
 PATCHES=(
 	"${FILESDIR}/0001-exclude-more-tests.patch"
 )
-
-RDEPEND="                                                                                                                                 
-    dev-python/setuptools[${PYTHON_USEDEP}]                                                                                               
-"
 
 distutils_enable_tests pytest
