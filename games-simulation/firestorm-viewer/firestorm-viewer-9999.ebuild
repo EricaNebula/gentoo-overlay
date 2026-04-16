@@ -78,6 +78,9 @@ pkg_setup() {
 
     export AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} -DLL_TESTS:BOOL=FALSE -DLLCOREHTTP_TESTS=FALSE"
     export AUTOBUILD_VARIABLES_FILE=/usr/share/firestorm-viewer/fs-build-variables/variables
+
+    # Seems to be necessary to compile with gcc15
+    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds"
 }
 
 src_unpack() {
