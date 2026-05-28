@@ -13,9 +13,9 @@ MY_PV="1.5"
 
 DESCRIPTION="An online multiplayer project for the Super Mario 64 PC port"
 HOMEPAGE="https://github.com/coop-deluxe/sm64coopdx"
-SRC_URI="https://github.com/coop-deluxe/${PN}/archive/refs/tags/v${MY_PV}.tar.gz -> ${P}.tar.gz" 
+SRC_URI="https://github.com/coop-deluxe/${PN}/archive/refs/tags/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="none"
+LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64"
 
@@ -24,7 +24,7 @@ DEPEND="
 	media-libs/glew
 	dev-vcs/git
 	net-misc/curl
-	sys-libs/zlib
+	virtual/zlib
 "
 
 RDEPEND="${DEPEND}"
@@ -46,10 +46,10 @@ src_compile() {
 src_install() {
 	# Install files into /opt/sm64coopdx
 	insinto /opt/${PN}
-	doins -r ${S}/build/us_pc/*
+	doins -r "${S}/build/us_pc/*"
 
 	# Make /opt/sm64coopdx/sm64coopdx executable
-	fperms +x /opt/${PN}/sm64coopdx
+	fperms +x "/opt/${PN}/sm64coopdx"
 
 	# Install the launcher stub into /usr/bin
 	dobin "${FILESDIR}/sm64coopdx"

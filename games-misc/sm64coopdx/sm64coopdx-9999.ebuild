@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_SETUPTOOLS="rdepend"
 
@@ -14,7 +14,7 @@ HOMEPAGE="https://github.com/coop-deluxe/sm64coopdx"
 EGIT_REPO_URI="https://github.com/coop-deluxe/sm64coopdx.git"
 EGIT_BRANCH="dev"
 
-LICENSE="none"
+LICENSE=""
 SLOT="0"
 KEYWORDS=""
 
@@ -22,7 +22,7 @@ DEPEND="media-libs/libsdl2
 media-libs/glew
 dev-vcs/git
 net-misc/curl
-sys-libs/zlib"
+virtual/zlib"
 
 RDEPEND="${DEPEND}"
 
@@ -37,10 +37,10 @@ src_compile() {
 src_install() {
 	# Install files into /opt/sm64coopdx
 	insinto /opt/${PN}
-	doins -r ${S}/build/us_pc/*
+	doins -r "${S}/build/us_pc/*"
 
 	# Make /opt/sm64coopdx/sm64coopdx executable
-	fperms +x /opt/${PN}/sm64coopdx
+	fperms +x "/opt/${PN}/sm64coopdx"
 
 	# Install the launcher stub into /usr/bin
 	dobin "${FILESDIR}/sm64coopdx"
