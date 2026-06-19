@@ -1,4 +1,4 @@
-# Copyright 2025 Erica Nebula
+# Copyright 2025-2026 Erica Nebula
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_SETUPTOOLS="rdepend"
 
-inherit git-r3 desktop
+inherit git-r3 desktop xdg
 
 DESCRIPTION="An online multiplayer project for the Super Mario 64 PC port"
 HOMEPAGE="https://github.com/coop-deluxe/sm64coopdx"

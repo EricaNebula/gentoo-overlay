@@ -9,11 +9,9 @@ DISTUTILS_USE_SETUPTOOLS="rdepend"
 
 inherit desktop xdg
 
-MY_PV="1.5"
-
 DESCRIPTION="An online multiplayer project for the Super Mario 64 PC port"
 HOMEPAGE="https://github.com/coop-deluxe/sm64coopdx"
-SRC_URI="https://github.com/coop-deluxe/${PN}/archive/refs/tags/v${MY_PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/coop-deluxe/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE=""
 SLOT="0"
@@ -32,7 +30,7 @@ RDEPEND="${DEPEND}"
 src_unpack() {
 	default
 	ls -l "${WORKDIR}"
-	mv "${WORKDIR}/${PN}-${MY_PV}" "${WORKDIR}/${PN}-${PV}"
+	mv "${WORKDIR}/${PN}-${PV}" "${WORKDIR}/${PN}-${PV}"
 }
 
 src_configure() {
