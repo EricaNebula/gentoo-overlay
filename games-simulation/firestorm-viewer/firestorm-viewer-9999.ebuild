@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
@@ -32,6 +32,7 @@ IUSE="+fmodstudio cpu_flags_x86_avx2 opensim voice"
 PATCHES=(
     "${FILESDIR}/append-unofficial.patch"
     "${FILESDIR}/point-release-revision.patch"
+    #"${FILESDIR}/do-not-reset-bvh.patch"
 )
 
 BDEPEND="
@@ -79,8 +80,17 @@ pkg_setup() {
     export AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} -DLL_TESTS:BOOL=FALSE -DLLCOREHTTP_TESTS=FALSE"
     export AUTOBUILD_VARIABLES_FILE=/usr/share/firestorm-viewer/fs-build-variables/variables
 
-    # Seems to be necessary to compile with gcc15
-    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds"
+    # Necessary to compile with gcc15
+    #   -Wno-free-nonheap-object
+    #   -Wno-array-bounds
+    #
+    # Necessary to compile with gcc16 
+    #   -Wno-sfinae-incomplete
+    #
+    # Ideally upstream will fix these things as they add compatibility for newer versions of gcc,
+    # but right now they are targeting gcc-14 so there's not much point reporting them unless
+    # I plan to fix things myself.
+    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds -Wno-sfinae-incomplete"
 }
 
 src_unpack() {
@@ -119,8 +129,8 @@ src_compile() {
 
 src_install() {
     # Remove unnecessary Windows DLLs
-    rm -r ${PACKAGED}/bin/win32
-    rm -r ${PACKAGED}/bin/win64
+    rm -r "${PACKAGED}/bin/win32" || die
+    rm -r "${PACKAGED}/bin/win64" || die
 
     # Install viewer files
     insinto ${DEST}
