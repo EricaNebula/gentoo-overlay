@@ -1,9 +1,9 @@
-# Copyright 2025 Erica Nebula
+# Copyright 2025-2026 Erica Nebula
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
@@ -32,6 +32,7 @@ IUSE="+fmodstudio cpu_flags_x86_avx2 opensim voice"
 PATCHES=(
     "${FILESDIR}/append-unofficial.patch"
     "${FILESDIR}/point-release-revision.patch"
+    #"${FILESDIR}/do-not-reset-bvh.patch"
 )
 
 BDEPEND="
@@ -47,7 +48,7 @@ media-libs/fontconfig
 dev-build/cmake
 dev-libs/glib
 sys-libs/glibc
-sys-devel/gcc:11
+>=sys-devel/gcc-13
 net-misc/fs-build-variables
 $(python_gen_cond_dep '
     dev-python/autobuild[${PYTHON_USEDEP}]
@@ -78,9 +79,18 @@ pkg_setup() {
 
     export AUTOBUILD_FLAGS="${AUTOBUILD_FLAGS} -DLL_TESTS:BOOL=FALSE -DLLCOREHTTP_TESTS=FALSE"
     export AUTOBUILD_VARIABLES_FILE=/usr/share/firestorm-viewer/fs-build-variables/variables
-    export CC=/usr/x86_64-pc-linux-gnu/gcc-bin/11/gcc
-    export CXX=/usr/x86_64-pc-linux-gnu/gcc-bin/11/g++
-    export CXXFLAGS="${CXXFLAGS} -std=gnu++20"
+
+    # Necessary to compile with gcc15
+    #   -Wno-free-nonheap-object
+    #   -Wno-array-bounds
+    #
+    # Necessary to compile with gcc16 
+    #   -Wno-sfinae-incomplete
+    #
+    # Ideally upstream will fix these things as they add compatibility for newer versions of gcc,
+    # but right now they are targeting gcc-14 so there's not much point reporting them unless
+    # I plan to fix things myself.
+    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds -Wno-sfinae-incomplete"
 }
 
 src_unpack() {
@@ -119,8 +129,8 @@ src_compile() {
 
 src_install() {
     # Remove unnecessary Windows DLLs
-    rm -r ${PACKAGED}/bin/win32
-    rm -r ${PACKAGED}/bin/win64
+    rm -r "${PACKAGED}/bin/win32" || die
+    rm -r "${PACKAGED}/bin/win64" || die
 
     # Install viewer files
     insinto ${DEST}
@@ -136,7 +146,6 @@ src_install() {
     fperms +x ${DEST}/bin/do-not-directly-run-firestorm-bin
     fperms +x ${DEST}/bin/dullahan_host
     fperms +x ${DEST}/bin/linux-crash-logger.bin
-    fperms +x ${DEST}/bin/snapshot_blob.bin
     fperms +x ${DEST}/bin/v8_context_snapshot.bin
     fperms +x ${DEST}/bin/llplugin/libmedia_plugin_cef.so
     fperms +x ${DEST}/bin/llplugin/libmedia_plugin_gstreamer.so

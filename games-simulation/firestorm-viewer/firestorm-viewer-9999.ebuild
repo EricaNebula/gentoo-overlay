@@ -167,3 +167,11 @@ src_install() {
     chrpath -d ${ED}/${DEST}/lib/libalut.so.0.0.0
     chrpath -d ${ED}/${DEST}/bin/dullahan_host
 }
+
+pkg_postinst() {
+	xdg_pkg_postinst
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+}
