@@ -22,8 +22,10 @@ else
     KEYWORDS="~amd64"
 fi
 
-PACKAGED="build-linux-x86_64/newview/packaged"
-DEST="/opt/firestorm-viewer"
+NEWVIEW="build-linux-x86_64/newview"
+PACKAGED="${NEWVIEW}/packaged"
+TO_INSTALL="${NEWVIEW}/${PN}"
+DEST="/opt/${PN}"
 
 LICENSE="GPL-2-with-Linden-Lab-FLOSS-exception"
 SLOT="0"
@@ -60,7 +62,7 @@ $(python_gen_cond_dep '
 RDEPEND="${BDEPEND}
 voice? ( net-dns/libidn-compat )"
 
-RESTRICT="mirror"
+RESTRICT="mirror test"
 
 pkg_setup() {
     AUTOBUILD_FLAGS="--no-package"
@@ -86,11 +88,13 @@ pkg_setup() {
     #
     # Necessary to compile with gcc16 
     #   -Wno-sfinae-incomplete
+    #   -Wno-stringop-overflow
+    #   -Wno-format-truncation
     #
     # Ideally upstream will fix these things as they add compatibility for newer versions of gcc,
     # but right now they are targeting gcc-14 so there's not much point reporting them unless
     # I plan to fix things myself.
-    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds -Wno-sfinae-incomplete"
+    export CXXFLAGS="${CXXFLAGS} -Wno-free-nonheap-object -Wno-array-bounds -Wno-sfinae-incomplete -Wno-stringop-overflow -Wno-format-truncation"
 }
 
 src_unpack() {
@@ -128,20 +132,16 @@ src_compile() {
 }
 
 src_install() {
-    # Remove unnecessary Windows DLLs
-    rm -r "${PACKAGED}/bin/win32" || die
-    rm -r "${PACKAGED}/bin/win64" || die
-
     # Install viewer files
-    insinto ${DEST}
-    doins -r ${PACKAGED}/*
+    mv "${PACKAGED}" "${TO_INSTALL}"
+    insinto /opt
+    doins -r "${TO_INSTALL}"
 
     # Set executable permissions where needed
     fperms +x ${DEST}/firestorm
     fperms +x ${DEST}/install.sh
     fperms +x ${DEST}/secondlife-i686.supp
     fperms +x ${DEST}/bin/SLPlugin
-    fperms +x ${DEST}/bin/SLVoice
     fperms +x ${DEST}/bin/chrome-sandbox
     fperms +x ${DEST}/bin/do-not-directly-run-firestorm-bin
     fperms +x ${DEST}/bin/dullahan_host
@@ -170,8 +170,10 @@ src_install() {
 
 pkg_postinst() {
 	xdg_pkg_postinst
+    xdg_icon_cache_update
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
+    xdg_icon_cache_update
 }
