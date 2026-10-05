@@ -43,8 +43,9 @@ src_compile() {
 
 src_install() {
 	# Install files into /opt/sm64coopdx
-	insinto /opt/${PN}
-	doins -r "${S}/build/us_pc/*"
+	insinto /opt
+	mv "${S}/build/us_pc/" "${S}/build/${PN}"
+	doins -r "${S}/build/${PN}"
 
 	# Make /opt/sm64coopdx/sm64coopdx executable
 	fperms +x "/opt/${PN}/sm64coopdx"
