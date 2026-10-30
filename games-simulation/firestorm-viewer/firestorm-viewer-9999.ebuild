@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{13..15} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
@@ -50,7 +50,8 @@ media-libs/fontconfig
 dev-build/cmake
 dev-libs/glib
 sys-libs/glibc
->=sys-devel/gcc-13
+>=sys-devel/gcc-14
+<media-video/vlc-4.0.0
 net-misc/fs-build-variables
 $(python_gen_cond_dep '
     dev-python/autobuild[${PYTHON_USEDEP}]
@@ -138,21 +139,31 @@ src_install() {
     doins -r "${TO_INSTALL}"
 
     # Set executable permissions where needed
-    fperms +x ${DEST}/firestorm
-    fperms +x ${DEST}/install.sh
-    fperms +x ${DEST}/secondlife-i686.supp
-    fperms +x ${DEST}/bin/SLPlugin
-    fperms +x ${DEST}/bin/chrome-sandbox
-    fperms +x ${DEST}/bin/do-not-directly-run-firestorm-bin
-    fperms +x ${DEST}/bin/dullahan_host
-    fperms +x ${DEST}/bin/linux-crash-logger.bin
-    fperms +x ${DEST}/bin/v8_context_snapshot.bin
-    fperms +x ${DEST}/bin/llplugin/libmedia_plugin_cef.so
-    fperms +x ${DEST}/bin/llplugin/libmedia_plugin_gstreamer.so
-    fperms +x ${DEST}/etc/handle_secondlifeprotocol.sh
-    fperms +x ${DEST}/etc/launch_url.sh
-    fperms +x ${DEST}/etc/refresh_desktop_app_entry.sh
-    fperms +x ${DEST}/etc/register_secondlifeprotocol.sh
+
+    declare -a FILES=(
+        "firestorm"
+        "install.sh"
+        "bin/SLPlugin"
+        "bin/chrome-sandbox"
+        "bin/do-not-directly-run-firestorm-bin"
+        "bin/dullahan_host"
+        "bin/linux-crash-logger.bin"
+        "bin/v8_context_snapshot.bin"
+        "bin/llplugin/libmedia_plugin_cef.so"
+        "etc/handle_secondlifeprotocol.sh"
+        "etc/refresh_desktop_app_entry.sh"
+        "etc/register_secondlifeprotocol.sh"
+    )
+
+    for name in "${FILES[@]}"
+    do
+        FILE="${DEST}/${name}"
+        if [ -f "${FILE}" ]; then
+            echo fperms +x "${FILE}"
+        else
+            echo "!! CANNOT APPLY FPERMS. FILE DOES NOT EXIST: ${FILE}"
+        fi
+    done
 
     # Symlink the main executable
     dosym ${DEST}/firestorm /usr/bin/firestorm
